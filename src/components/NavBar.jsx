@@ -19,8 +19,9 @@ export default function NavBar() {
   }
   const LogOutFunction = () => {
     localStorage.clear();
-    navigate('/');
+    setLoggedIn(false);
     setDisplayUsername('');
+    navigate('/');
     window.location.reload();
   }
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function NavBar() {
           <Link to='/'>
             <h1 className='mr-5'>Home</h1>
           </Link>
-          <Link to='/newpost'>
+          <Link to='/createpost'>
             <h1>Create Post</h1>
           </Link>
         </div>
@@ -51,12 +52,9 @@ export default function NavBar() {
         ) : (
           <div className='flex text-zinc-800 text-3xl font-bold justify-items-center'>
             <h1 className='mr-5'>{ displayUsername }</h1>
-          
           <h1 onClick={LogOutFunction} >Log Out</h1>
-          
         </div>
         ) }
-        
       </div>
     </div>
   )
