@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import url from '../helpers/url';
 
-export default function CreateUserCard() {
+
+export default function LoginCard() {
 	const [message, setMessage] = useState('');
 	const [render, setRender] = useState(false);
 	const initialValues = {
@@ -25,7 +26,7 @@ export default function CreateUserCard() {
 		password:Yup.string().required('A Password is required').min(3, 'The Password must have min. of 3 caracters').max(15),
 		});
 
-  return (
+	return (
     <div className='w-[1100px] h-[700px] mt-8 bg-yellow-400 flex items-center justify-between border-2 border-neutral-300 shadow-[5px_5px_10px_0px_rgba(0,0,0,0.3)]'>
 			<div className='w-[40%] h-full bg-black'></div>
 			<div className='w-[60%] h-full bg-white flex flex-col'>
