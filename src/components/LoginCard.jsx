@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import myContext from '../context/myContext';
 import * as Yup from 'yup';
 import axios from 'axios';
 import url from '../helpers/url';
@@ -9,6 +10,8 @@ import url from '../helpers/url';
 export default function LoginCard() {
 	const [message, setMessage] = useState('');
 	const [render, setRender] = useState(false);
+	const { setDisplayUsername } = useContext(myContext);
+	const navigate = useNavigate();
 	const initialValues = {
 		username:'',
 		password:'',
@@ -20,8 +23,14 @@ export default function LoginCard() {
 		if (loginUser.data.error) {
 			setMessage(loginUser.data.error);
 			return setRender(true);
-		}
+		};
 		
+		localStorage.setItem('token', loginUser.data.token);
+		localStorage.setItem('username', loginUser.data.username);
+		localStorage.setItem('id', loginUser.data.id);
+		setDisplayUsername(loginUser.data.username);
+		navigate('/');
+
 	}
 
 	const validationSchema = Yup.object().shape({
