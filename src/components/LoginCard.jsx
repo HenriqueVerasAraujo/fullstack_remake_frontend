@@ -16,14 +16,17 @@ export default function LoginCard() {
 
 	const onSubmit = async(data) => {
 		setRender(false);
-		const createUser = await axios.post(`${url}/users/createuser`, data);
-		setMessage(createUser.data.message);
-		return setRender(true);
+		const loginUser = await axios.post(`${url}/users/login`, data);
+		if (loginUser.data.error) {
+			setMessage(loginUser.data.error);
+			return setRender(true);
+		}
+		
 	}
 
 	const validationSchema = Yup.object().shape({
-		username:Yup.string().required('A Username is required').min(3).max(30),
-		password:Yup.string().required('A Password is required').min(3, 'The Password must have min. of 3 caracters').max(15),
+		username:Yup.string().required('A Username is required'),
+		password:Yup.string().required('A Password is required'),
 		});
 
 	return (
@@ -31,7 +34,7 @@ export default function LoginCard() {
 			<div className='w-[40%] h-full bg-black'></div>
 			<div className='w-[60%] h-full bg-white flex flex-col'>
 				<div className='w-full h-[15%] bg-yellow-400 border-b-4 border-neutral-800 flex justify-center items-center'>
-							<h1 className='text-5xl font-bold'>Sign Up</h1>
+							<h1 className='text-5xl font-bold'>Log in</h1>
 				</div>
 				<div className='w-full h-[85%] mt-[70px] bg-white flex flex-col items-center'>
                 <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
@@ -43,8 +46,8 @@ export default function LoginCard() {
                             
                             <label className='text-xl' htmlFor="password">Password: </label>
                             <ErrorMessage component='span' className='text-red-700' name='password'/>
-                            <Field className='mb-5 border-2 rounded-md text-2xl'type='password' name='password' placeholder="Password must have 3-15 caracters."/>
-                            <button className='bg-black text-white border-black border-2 font-bold rounded-md h-10 hover:bg-yellow-400 hover:text-black cl' type='submit'>CREATE ACCOUNT</button>
+                            <Field className='mb-5 border-2 rounded-md text-2xl'type='password' name='password' placeholder="Ex. MyPassword123"/>
+                            <button className='bg-black text-white border-black border-2 font-bold rounded-md h-10 hover:bg-yellow-400 hover:text-black cl' type='submit'>LOG IN</button>
                         </Form>
                         <div className='flex justify-center mt-5 text-xl'>
                             {render && (
@@ -54,9 +57,9 @@ export default function LoginCard() {
                     </div>
                 </Formik>
                 <div className='flex'>
-                    <h1>Already have an account?</h1>
-										<Link to='/login'>
-                    	<h1 className='text-blue-500 ml-2'>Click here to Log in!</h1>
+                    <h1>Don't have an account?</h1>
+										<Link to='/createuser'>
+                    	<h1 className='text-blue-500 ml-2'>Click here to create an account!</h1>
 										</Link>
                 </div>
             </div>
