@@ -20,6 +20,12 @@ export default function Home() {
     }
   }, [allPosts]);
 
+  useEffect(() => {
+      getPosts();
+      setRenderPosts(true);
+    
+  }, []);
+
   return (
     <div className='w-full h-screen bg-neutral-100'>
       <div className='w-full h-auto flex justify-center absolute top-[120px] z-0 bg-neutral-100'>
