@@ -8,12 +8,33 @@ import url from '../helpers/url';
 export default function SinglePostPage() {
     const { id } = useParams();
     const [postData, setPostData] = useState({});
+    const [commentData, setCommentData] = useState([]);
     const [height, setHeight] = useState('h-[210px]');
     const [render, setRender] = useState(false);
 
+    let initialValues = {
+        commentText: '',
+    };
+
+    const onSubmit = async(data) => {
+        const sendComment = await axios.post(`${url}/comments/createcomment`, {...data, postId: id}, {headers: {token: localStorage.getItem('token')}});
+        if (sendComment.data.error) {
+            return alert('You need to be Logged In to comment a post!');
+        }
+        const allComments = await axios.get(`${url}/comments/${id}`);
+        setCommentData(allComments.data);
+        document.location.reload(true);
+    };
+
+    const validationSchema = Yup.object().shape({
+        commentText:Yup.string().required('A text is required').min(3).max(200),
+        });
+        
     const getData = async (id) => {
         const post = await axios.get(`${url}/posts/getsingle/${id}`);
         setPostData(post.data);
+        const comments = await axios.get(`${url}/comments/${id}`);
+        setCommentData(comments.data);
     };
 
     const verifyHeight = async (post) => {
@@ -88,7 +109,7 @@ export default function SinglePostPage() {
                         </div>
                     </div> */}
                     {/* Create a Comment area */}
-                    {/* <div className='flex items-center flex-col'>
+                    <div className='flex items-center flex-col'>
                         <h1>Create a comment:</h1>
                         <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
                             <Form className='flex flex-col'>
@@ -99,7 +120,7 @@ export default function SinglePostPage() {
                                 <button className='bg-blue-600' type='submit'>Create Comment</button>
                             </Form>
                         </Formik>
-                    </div> */}
+                    </div>
             </div>
         </div>
       </div>
