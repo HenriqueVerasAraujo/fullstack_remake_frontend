@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import url from '../helpers/url';
+
 
 export default function SinglePostPage() {
     const { id } = useParams();
@@ -11,23 +12,33 @@ export default function SinglePostPage() {
     const [commentData, setCommentData] = useState([]);
     const [height, setHeight] = useState('h-[210px]');
     const [render, setRender] = useState(false);
+    const [renderComments, setRenderComments] = useState(false);
     const username = localStorage.getItem('username');
+    const ref = useRef(null);
 
     let initialValues = {
         commentText: '',
     };
 
-    const deleteComment = async (id) => {
-        const deleteComment = await axios.delete()
+    const deleteComment = async (CommentId) => {
+        setRenderComments(false);
+        await axios.delete(`${url}/comments/delete/${CommentId}`);
+        const allComments = await axios.get(`${url}/comments/getall/${id}`);
+        setCommentData(allComments.data);
+        setRenderComments(true);
+        // document.location.reload(true);
     };
 
     const onSubmit = async(data) => {
+        setRenderComments(false);
         const sendComment = await axios.post(`${url}/comments/createcomment`, {...data, postId: id}, {headers: {token: localStorage.getItem('token')}});
         if (sendComment.data.error) {
             return alert('You need to be Logged In to comment a post!');
         }
         const allComments = await axios.get(`${url}/comments/getall/${id}`);
         setCommentData(allComments.data);
+        setRenderComments(true);
+        // ref.current.value = '';
         document.location.reload(true);
     };
 
@@ -63,6 +74,7 @@ export default function SinglePostPage() {
             verifyHeight(postData);  
         };
         setRender(true);
+        setRenderComments(true);
     }, []);
 
   return (
@@ -98,7 +110,7 @@ export default function SinglePostPage() {
                             <Form className='flex flex-col'>
                                 <ErrorMessage component='span' name='commentText'/>
                                 <label htmlFor="commentText"> Comment: 
-                                    <Field type='text' name='commentText' placeholder='Your comment here...'></Field>
+                                    <Field ref={ref} type='text' name='commentText' placeholder='Your comment here...'></Field>
                                 </label>
                                 <button className='bg-blue-600' type='submit'>Create Comment</button>
                             </Form>
@@ -109,7 +121,7 @@ export default function SinglePostPage() {
                     <div className='flex flex-col items-center my-10'>
                         <h1>COMMENTS:</h1>
                         <div className='w-full border-2 border-neutral-300 rounded-md bg-white p-3'>
-                            {commentData.map((singleComment) => (
+                            {renderComments && commentData.map((singleComment) => (
                                 <div className='w-full border-2 border-neutral-300 mb-5 rounded-md'>
                                     <div>
                                         <h1 className='p-3'>{singleComment.commentText}</h1> 
