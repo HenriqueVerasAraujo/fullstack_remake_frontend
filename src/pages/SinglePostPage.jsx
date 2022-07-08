@@ -11,9 +11,14 @@ export default function SinglePostPage() {
     const [commentData, setCommentData] = useState([]);
     const [height, setHeight] = useState('h-[210px]');
     const [render, setRender] = useState(false);
+    const username = localStorage.getItem('username');
 
     let initialValues = {
         commentText: '',
+    };
+
+    const deleteComment = async (id) => {
+        const deleteComment = await axios.delete()
     };
 
     const onSubmit = async(data) => {
@@ -21,7 +26,7 @@ export default function SinglePostPage() {
         if (sendComment.data.error) {
             return alert('You need to be Logged In to comment a post!');
         }
-        const allComments = await axios.get(`${url}/comments/${id}`);
+        const allComments = await axios.get(`${url}/comments/getall/${id}`);
         setCommentData(allComments.data);
         document.location.reload(true);
     };
@@ -33,7 +38,7 @@ export default function SinglePostPage() {
     const getData = async (id) => {
         const post = await axios.get(`${url}/posts/getsingle/${id}`);
         setPostData(post.data);
-        const comments = await axios.get(`${url}/comments/${id}`);
+        const comments = await axios.get(`${url}/comments/getall/${id}`);
         setCommentData(comments.data);
     };
 
@@ -85,11 +90,26 @@ export default function SinglePostPage() {
                             </div>
                         </div>
                     </div>
+
+                    {/* Create a Comment area */}
+                    <div className='flex items-center flex-col'>
+                        <h1>Create a comment:</h1>
+                        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+                            <Form className='flex flex-col'>
+                                <ErrorMessage component='span' name='commentText'/>
+                                <label htmlFor="commentText"> Comment: 
+                                    <Field type='text' name='commentText' placeholder='Your comment here...'></Field>
+                                </label>
+                                <button className='bg-blue-600' type='submit'>Create Comment</button>
+                            </Form>
+                        </Formik>
+                    </div>
+
                     {/* Comments area */}
-                    {/* <div className='flex flex-col items-center my-10'>
+                    <div className='flex flex-col items-center my-10'>
                         <h1>COMMENTS:</h1>
                         <div className='w-full border-2 border-neutral-300 rounded-md bg-white p-3'>
-                            {comments.map((singleComment) => (
+                            {commentData.map((singleComment) => (
                                 <div className='w-full border-2 border-neutral-300 mb-5 rounded-md'>
                                     <div>
                                         <h1 className='p-3'>{singleComment.commentText}</h1> 
@@ -107,22 +127,9 @@ export default function SinglePostPage() {
                                 </div>
                             ))}
                         </div>
-                    </div> */}
-                    {/* Create a Comment area */}
-                    <div className='flex items-center flex-col'>
-                        <h1>Create a comment:</h1>
-                        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-                            <Form className='flex flex-col'>
-                                <ErrorMessage component='span' name='commentText'/>
-                                <label htmlFor="commentText"> Comment: 
-                                    <Field type='text' name='commentText' placeholder='Your comment here...'></Field>
-                                </label>
-                                <button className='bg-blue-600' type='submit'>Create Comment</button>
-                            </Form>
-                        </Formik>
                     </div>
             </div>
         </div>
       </div>
   )
-}
+};
