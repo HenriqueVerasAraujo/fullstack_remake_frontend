@@ -13,6 +13,12 @@ export default function Home() {
     setAllPosts(fetchPosts.data);
   };
 
+  const deletePost = async (postId) => {
+    const filteredList = allPosts.filter((post) => post.id !== Number(postId));
+    axios.delete(`${url}/posts/delete/${postId}`);
+    setAllPosts(filteredList);
+  }
+
   useEffect(() => {
     if (allPosts.length === 0) {
       getPosts();

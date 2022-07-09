@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react'
 // import url from '../helpers/url';
 import { useNavigate } from 'react-router-dom';
 
-export default function SinglePost({ title, text, username, postId }) {
+export default function SinglePost({ title, text, username, postId, deletePost }) {
     const [height, setHeight] = useState('h-[210px]');
     const navigate = useNavigate();
+    const loggedUsername = localStorage.getItem('username');
 
     const verifyHeight = () => {
         if (text.length <= 155) {
@@ -42,11 +43,11 @@ export default function SinglePost({ title, text, username, postId }) {
                           <p className='text-xl break-all'>{text}</p>
                       </div>
                   <div className='bg-yellow-400 h-[70px] rounded-b-sm flex items-center justify-end px-5'>
-                      {/* <div className='flex justify-center items-center'>
-                          {username === userUsername && (
-                              <button className='bg-black text-white' type='button' onClick={() => {deleteFunction(id)}}>DELETE</button>
+                      <div className='flex justify-center items-center'>
+                          {username === loggedUsername && (
+                              <button className='bg-black text-white' type='button' onClick={ deletePost }>DELETE</button>
                           )}
-                          {likeStatus ? (
+                          {/* {likeStatus ? (
                               <button type='button' onClick={likeFunction}>
                                   <ThumbFull className='w-6'/>
                               </button>
@@ -55,8 +56,8 @@ export default function SinglePost({ title, text, username, postId }) {
                                   <ThumbUpIcon className='w-6'/>
                               </button>
                           )}
-                          <h2 className='mr-7 ml-1 text-xl font-bold'> {likesNumber}</h2>
-                      </div> */}
+                          <h2 className='mr-7 ml-1 text-xl font-bold'> {likesNumber}</h2> */}
+                      </div>
                       <div className='flex justify-center items-center'>
                           <h2>By:</h2>
                           <h2 className='hover:text-white cursor-pointer ml-1'>{username}</h2>
