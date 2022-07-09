@@ -45,7 +45,7 @@ export default function SinglePost({ title, text, username, postId, deletePost }
                   <div className='bg-yellow-400 h-[70px] rounded-b-sm flex items-center justify-end px-5'>
                       <div className='flex justify-center items-center'>
                           {username === loggedUsername && (
-                              <button className='bg-black text-white' type='button' onClick={ deletePost }>DELETE</button>
+                              <button className='bg-black text-white' type='button' onClick={ ()=>{ deletePost(postId) } }>DELETE</button>
                           )}
                           {/* {likeStatus ? (
                               <button type='button' onClick={likeFunction}>
