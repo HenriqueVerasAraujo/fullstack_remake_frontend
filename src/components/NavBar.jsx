@@ -34,25 +34,25 @@ export default function NavBar() {
       <div className='flex text-zinc-800 text-3xl font-bold'>
             <h1 className='mr-5 text-4xl'>{`</>`}</h1>
           <Link to='/'>
-            <h1 className='mr-5'>Home</h1>
+            <h1 className='mr-5 hover:text-zinc-200' >Home</h1>
           </Link>
           <Link to='/createpost'>
-            <h1>Create Post</h1>
+            <h1 className='hover:text-zinc-200'>Create Post</h1>
           </Link>
         </div>
         { !loggedIn ? (
           <div className='flex text-zinc-800 text-3xl font-bold justify-items-center'>
           <Link to='/login'>
-            <h1 className='mr-5'>Log In</h1>
+            <h1 className='mr-5 cursor-pointer hover:text-zinc-200'>Log In</h1>
           </Link>
           <Link to='createuser'>
-          <h1>Sign Up</h1>
+          <h1 className='cursor-pointer hover:text-zinc-200'>Sign Up</h1>
           </Link>
         </div>
         ) : (
           <div className='flex text-zinc-800 text-3xl font-bold justify-items-center'>
             <h1 className='mr-5'>{ displayUsername }</h1>
-          <h1 onClick={LogOutFunction} >Log Out</h1>
+          <h1 className='cursor-pointer hover:text-zinc-200' onClick={LogOutFunction} >Log Out</h1>
         </div>
         ) }
       </div>
