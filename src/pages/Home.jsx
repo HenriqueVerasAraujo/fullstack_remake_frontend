@@ -43,6 +43,7 @@ export default function Home() {
             postId={singlePost.id}
             username={singlePost.username}
             deletePost={deletePost}
+            likes={singlePost.Likes}
             />
           )))}
         </div>
