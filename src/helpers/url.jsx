@@ -1,3 +1,3 @@
-const url = 'http://localhost:3001';
+const url = 'https://fullstack-back-veras.herokuapp.com/';
 
 export default url;
