@@ -29,7 +29,6 @@ export default function Home() {
   useEffect(() => {
       getPosts();
       setRenderPosts(true);
-    
   }, []);
 
   return (
